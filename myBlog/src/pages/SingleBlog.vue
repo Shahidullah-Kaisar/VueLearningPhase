@@ -5,6 +5,7 @@ import { onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
 import { VueSpinnerDots } from "vue3-spinners";
+import Swal from 'sweetalert2'
 
 const route = useRoute();
 const blogId = route.params.id;
@@ -34,21 +35,26 @@ onMounted(async () => {
 
 const handleDelete = async () => {
   try {
-    const isconfirmed = window.confirm("Are You Sure?");
-    if (isconfirmed) {
-      const response = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${blogId}`);
-      console.log(response.status)
-      if(response.status === 200){
-        router.push("/myBlogs");
-        toast.success("Blog Deleted Successfully");
-      }
+    const result =await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      await axios.delete(`https://jsonplaceholder.typicode.com/posts/${blogId}`);
+      router.push("/myBlogs");
+      toast.success("Blog Deleted Successfully");
     }
   } catch (error) {
     console.log(error);
-    toast.error("Blog is not Deleted")
+    toast.error("Blog is not Deleted");
   }
 };
-
 </script>
 
 <template>
@@ -62,7 +68,8 @@ const handleDelete = async () => {
       </router-link>
     </div>
 
-    <div v-if="state.isLoading" class="flex justify-center items-center">
+    <!-- Loader -->
+    <div v-if="state.isLoading" class="flex justify-center items-center min-h-screen">
       <VueSpinnerDots class="text-6xl text-purple-600" />
     </div>
 

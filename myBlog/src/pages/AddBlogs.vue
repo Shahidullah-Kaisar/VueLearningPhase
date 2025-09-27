@@ -2,7 +2,9 @@
 import router from '@/router';
 import axios from 'axios';
 import { reactive } from 'vue';
+import { useToast } from 'vue-toastification';
 
+const toast = useToast()
 
 const form = reactive({
   title: "",
@@ -17,11 +19,12 @@ const handleSubmit = async() => {
 
   try {
     const response = await axios.post("https://jsonplaceholder.typicode.com/posts", newBlog);
-    router.push("/myBlogs");
-    alert("Blog added successfully!");
+    router.push(`/myBlogs/${response.data.id}`);
+    toast.success("Blog added successfully!");
 
   } catch (error) {
       console.log(error)
+      toast.error("Blog Not Added Successfully")
   }
 }
 

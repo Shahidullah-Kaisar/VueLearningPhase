@@ -4,6 +4,7 @@ import axios from 'axios';
 import { onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import { VueSpinnerDots } from 'vue3-spinners';
 
 const route = useRoute();
 const blogId = route.params.id;
@@ -29,6 +30,10 @@ onMounted(async()=> {
         form.body = state.blog.body
     } catch (error) {
         console.log(error)
+    } finally{
+        setTimeout(() => {
+          state.isLoading = false;
+        }, 1000);
     }
 })
 const handleSubmit = async() => {
@@ -54,7 +59,14 @@ const handleSubmit = async() => {
 
 <template>
   <section class="bg-gray-50 min-h-screen flex items-center justify-center py-12">
-    <div class="bg-white shadow-lg rounded-xl w-full max-w-lg p-8">
+
+    <!-- Loader -->
+    <div v-if="state.isLoading" class="flex justify-center items-center min-h-screen">
+      <VueSpinnerDots class="text-6xl text-purple-600" />
+    </div>
+
+
+    <div v-else class="bg-white shadow-lg rounded-xl w-full max-w-lg p-8">
       <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Update Blog</h2>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
@@ -89,7 +101,7 @@ const handleSubmit = async() => {
           type="submit"
           class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg hover:bg-purple-800 duration-300"
         >
-          Add Blog
+          Updated Blog
         </button>
       </form>
     </div>

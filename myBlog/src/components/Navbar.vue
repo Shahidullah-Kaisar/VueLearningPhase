@@ -1,44 +1,64 @@
 <script setup>
 import logo from '@/assets/img/logo.png'
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { useRoute, RouterLink } from 'vue-router';
 
 const isOpen = ref(false);
+const route = useRoute();
 
+const isActive = (path) => route.path === path;
+
+const closeMenu = () => {
+  isOpen.value = false;
+};
 </script>
 
 <template>
-  <nav class="bg-purple-700 border-b border-purple-600">
-    <div class="max-w-7xl h-20 mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        
+  <nav class="bg-gradient-to-r from-purple-700 via-indigo-700 to-purple-800 sticky top-0 z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-20 items-center">
+
         <!-- Logo -->
-       <div class="flex flex-1 items-center justify-start">
-          <RouterLink class="flex flex-shrink-0 items-center mr-4" to="/">
-            <img class="h-10 w-auto" :src="logo" alt="Vue Jobs" />
-            <span class="hidden md:block text-white text-2xl font-bold ml-2">
-              My Blogs
-            </span>
+        <RouterLink to="/" class="flex items-center gap-2">
+          <img :src="logo" class="h-10 w-auto" alt="Logo" />
+          <span class="text-white text-2xl font-extrabold hidden md:block tracking-wide">My Blogs</span>
+        </RouterLink>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-6">
+          <RouterLink
+            to="/"
+            class="relative text-white font-medium px-3 py-2 rounded-md hover:text-purple-200 transition-colors"
+          >
+            Home
+            <span v-if="isActive('/')" class="absolute bottom-0 left-0 w-full h-1 bg-purple-300 rounded-full animate-pulse"></span>
+          </RouterLink>
+
+          <RouterLink
+            to="/myBlogs"
+            class="relative text-white font-medium px-3 py-2 rounded-md hover:text-purple-200 transition-colors"
+          >
+            My Blogs
+            <span v-if="isActive('/myBlogs')" class="absolute bottom-0 left-0 w-full h-1 bg-purple-300 rounded-full animate-pulse"></span>
+          </RouterLink>
+
+          <RouterLink
+            to="/addBlogs"
+            class="relative text-white font-medium px-3 py-2 rounded-md hover:text-purple-200 transition-colors"
+          >
+            Add Blogs
+            <span v-if="isActive('/addBlogs')" class="absolute bottom-0 left-0 w-full h-1 bg-purple-300 rounded-full animate-pulse"></span>
           </RouterLink>
         </div>
 
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex space-x-8 items-center">
-          <RouterLink to="/" class="text-white hover:text-purple-200">Home</RouterLink>
-          <RouterLink to="/myBlogs" class="text-white hover:text-purple-200">My Blogs</RouterLink>
-          <RouterLink to="/addBlogs" class="text-white hover:text-purple-200">Add Blogs</RouterLink>
-        </div>
-
         <!-- Mobile Hamburger -->
-        <div class="flex items-center md:hidden">
+        <div class="flex md:hidden">
           <button
             @click="isOpen = !isOpen"
-            type="button"
-            class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-purple-600 focus:outline-none"
+            class="text-white p-2 rounded-md hover:bg-purple-600 focus:outline-none"
           >
-            <!-- Hamburger Icon -->
-            <span v-if="!isOpen">☰</span>
-            <span v-else>✕</span>
+            <span v-if="!isOpen" class="text-2xl">☰</span>
+            <span v-else class="text-2xl">✕</span>
           </button>
         </div>
 
@@ -46,10 +66,58 @@ const isOpen = ref(false);
     </div>
 
     <!-- Mobile Menu -->
-    <div v-if="isOpen" class="md:hidden absolute w-full flex flex-col items-center bg-purple-600 px-2 pt-2 pb-3 space-y-1">
-      <RouterLink to="/" class="block text-white px-3 py-2 rounded-md hover:bg-purple-500">Home</RouterLink>
-      <RouterLink to="/myBlogs" class="block text-white px-3 py-2 rounded-md hover:bg-purple-500">My Blogs</RouterLink>
-      <RouterLink to="/addBlogs" class="block text-white px-3 py-2 rounded-md hover:bg-purple-500">Add Blogs</RouterLink>
-    </div>
+    <transition name="slide-fade">
+      <div 
+        v-if="isOpen" 
+        class="md:hidden absolute top-20 left-0 w-full bg-purple-600 px-4 py-4 flex flex-col gap-2 z-40"
+      >
+        <RouterLink
+          to="/"
+          @click="closeMenu"
+          :class="['block font-medium px-3 py-2 rounded-md transition', isActive('/') ? 'bg-purple-500' : 'text-white hover:bg-purple-500']"
+        >
+          Home
+        </RouterLink>
+        <RouterLink
+          to="/myBlogs"
+          @click="closeMenu"
+          :class="['block font-medium px-3 py-2 rounded-md transition', isActive('/myBlogs') ? 'bg-purple-500' : 'text-white hover:bg-purple-500']"
+        >
+          My Blogs
+        </RouterLink>
+        <RouterLink
+          to="/addBlogs"
+          @click="closeMenu"
+          :class="['block font-medium px-3 py-2 rounded-md transition', isActive('/addBlogs') ? 'bg-purple-500' : 'text-white hover:bg-purple-500']"
+        >
+          Add Blogs
+        </RouterLink>
+      </div>
+    </transition>
   </nav>
 </template>
+
+<style scoped>
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+.slide-fade-leave-active {
+  transition: all 0.3s ease-in;
+}
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.slide-fade-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>

@@ -5,5 +5,5 @@ import Blogs from '@/components/Blogs.vue';
 </script>
 
 <template>
-    <Blogs :limit ="10" :showLoadButton="true"/>
+    <Blogs :limit ="8" :showLoadButton="true"/>
 </template>

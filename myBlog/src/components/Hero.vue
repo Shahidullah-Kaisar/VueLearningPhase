@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from 'vue-router';
+
 </script>
 
 <template>
@@ -8,7 +10,7 @@
 
         <!-- Text Content -->
         <div class="mb-10 lg:mb-0">
-          <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl">
+          <h1 class="text-2xl md:text-5xl font-bold text-gray-900">
             Welcome to <span class="text-green-700">my Blog</span>
           </h1>
           <p class="mt-6 text-lg text-gray-600">
@@ -16,18 +18,18 @@
             Clean design, mobile responsive, and easy to customize.
           </p>
           <div class="mt-8 flex space-x-4">
-            <a
-              href="#"
+            <RouterLink
+              to="/myBlogs"
               class="px-6 py-3 bg-green-700 text-white rounded-lg shadow hover:bg-green-800 transition"
             >
               Get Started
-            </a>
-            <a
-              href="#"
+            </RouterLink>
+            <RouterLink
+              to="/"
               class="px-6 py-3 bg-white border border-green-700 text-green-700 rounded-lg shadow hover:bg-green-50 transition"
             >
               Learn More
-            </a>
+            </RouterLink>
           </div>
         </div>
 
