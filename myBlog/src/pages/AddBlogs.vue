@@ -11,6 +11,7 @@ const form = reactive({
   body: ""
 })
 
+
 const handleSubmit = async() => {
   const newBlog = {
     title: form.title,
@@ -19,7 +20,8 @@ const handleSubmit = async() => {
 
   try {
     const response = await axios.post("https://jsonplaceholder.typicode.com/posts", newBlog);
-    router.push(`/myBlogs/${response.data.id}`);
+    // router.push(`/myBlogs/${response.data.id}`);
+    router.push({name: "single-blog", params: {id: response.data.id}})
     toast.success("Blog added successfully!");
 
   } catch (error) {
