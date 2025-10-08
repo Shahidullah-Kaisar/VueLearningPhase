@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "title": "Global Summit 2025: Leaders Discuss Climate Solutions",
+    "description": "World leaders gather to address global warming challenges and sustainable growth.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Environment",
+    "date": "2025-10-08"
+  },
+  {
+    "id": 2,
+    "title": "AI Revolution in Education: Transforming Learning Experience",
+    "description": "Schools are integrating AI tools to improve personalized learning.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Technology",
+    "date": "2025-10-07"
+  },
+  {
+    "id": 3,
+    "title": "Sports Update: National Team Wins Championship",
+    "description": "An exciting match ended with a dramatic finish in extra time.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Sports",
+    "date": "2025-10-06"
+  },
+  {
+    "id": 4,
+    "title": "Global Summit 2025: Leaders Discuss Climate Solutions",
+    "description": "World leaders gather to address global warming challenges and sustainable growth.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Environment",
+    "date": "2025-10-08"
+  },
+  {
+    "id": 5,
+    "title": "AI Revolution in Education: Transforming Learning Experience",
+    "description": "Schools are integrating AI tools to improve personalized learning.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Technology",
+    "date": "2025-10-07"
+  },
+  {
+    "id": 6,
+    "title": "Local Startup Launches Smart Farming Initiative",
+    "description": "Innovative tech helps farmers boost yield and reduce waste.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Business",
+    "date": "2025-10-05"
+  },
+  {
+    "id": 7,
+    "title": "Cultural Festival Lights Up the City",
+    "description": "Thousands gather to celebrate heritage with music, dance, and food.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Culture",
+    "date": "2025-10-04"
+  },
+  {
+    "id": 8,
+    "title": "Breakthrough in Renewable Energy Storage",
+    "description": "Scientists unveil a new battery that could revolutionize clean energy.",
+    "image": "https://images.unsplash.com/photo-1579532536935-619928decd08?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3BhcGVyfGVufDB8fDB8fHww",
+    "category": "Science",
+    "date": "2025-10-03"
+  }
+]

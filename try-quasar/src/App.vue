@@ -2,6 +2,11 @@
   <router-view />
 </template>
 
-<script setup>
-//
+<script>
+import { defineComponent } from 'vue'
+import './css/app.scss'
+
+export default defineComponent({
+  name: 'App'
+})
 </script>
