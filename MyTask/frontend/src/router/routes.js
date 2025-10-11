@@ -4,8 +4,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/HomePage.vue') },
-      { path: 'tasks', component: () => import('pages/IndexPage.vue') },
+      { path: 'add-tasks', component: () => import('pages/IndexPage.vue') },
       { path: 'about', component: () => import('pages/AboutPage.vue') },
+      { path: 'tasks', component: ()=> import('pages/TasksPage.vue')},
+      { path: 'login', component: ()=> import('pages/LoginPage.vue')},
+      { path: 'register', component: ()=> import('pages/RegisterPage.vue')}
     ]
   },
   {
