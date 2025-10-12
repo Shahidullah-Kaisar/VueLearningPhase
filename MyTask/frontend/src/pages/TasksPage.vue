@@ -2,19 +2,35 @@
 import axios from 'axios'
 import { useQuasar } from 'quasar'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
+const router = useRouter()
 const backendURL = 'http://localhost/MyTask/backend/api'
 
 const tasks = ref([])
+
 // Fetch tasks
 const fetchTasks = async () => {
   try {
-    const res = await axios.get(`${backendURL}/get_tasks.php`)
-    tasks.value = res.data
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("user_id"); // login সময়ে set করা লাগবে
+    
+    if(!token || !userId){
+      router.push("/login");
+      return
+    }
+
+    const res = await axios.get(`${backendURL}/get_tasks.php?user_id=${userId}`)
+
+    if(res.data.success){
+      tasks.value = res.data.tasks
+    } else {
+      $q.notify({ type: 'negative', message: 'Failed to fetch tasks' })
+    }
   } catch (err) {
     console.error(err)
-    $q.notify({ type: 'negative', message: 'Failed to fetch tasks' })
+    $q.notify({ type: 'negative', message: 'Server error' })
   }
 }
 
@@ -22,6 +38,7 @@ onMounted(() => {
   fetchTasks()
 })
 </script>
+
 
 <template>
   <!-- Task Cards -->

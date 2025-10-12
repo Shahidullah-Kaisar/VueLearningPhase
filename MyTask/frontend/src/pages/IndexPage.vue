@@ -2,15 +2,19 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useQuasar } from "quasar";
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar();
 const backendURL = "http://localhost/MyTask/backend/api";
+
+const router = useRouter()
 
 const task = ref({
   title: "",
   description: "",
   problemFaced: "",
-  timeSpent: ""
+  timeSpent: "",
+  user_id: ""
 });
 
 const tasks = ref([]);
@@ -28,28 +32,54 @@ const editTaskData = ref({
 // Fetch tasks
 const fetchTasks = async () => {
   try {
-    const res = await axios.get(`${backendURL}/get_tasks.php`);
-    tasks.value = res.data;
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("user_id"); // login সময়ে set করা লাগবে
+    
+    if(!token || !userId){
+      router.push("/login");
+      return
+    }
+
+    const res = await axios.get(`${backendURL}/get_tasks.php?user_id=${userId}`)
+
+    if(res.data.success){
+      tasks.value = res.data.tasks
+    } else {
+      $q.notify({ type: 'negative', message: 'Failed to fetch tasks' })
+    }
   } catch (err) {
-    console.error(err);
-    $q.notify({ type: "negative", message: "Failed to fetch tasks" });
+    console.error(err)
+    $q.notify({ type: 'negative', message: 'Server error' })
   }
-};
+}
+
 
 // Add task
 const addTask = async () => {
   if (!task.value.title || !task.value.description) return;
 
   try {
-    await axios.post(`${backendURL}/add_task.php`, task.value);
+    const userId = localStorage.getItem('user_id'); // logged-in user
+    if (!userId) {
+      $q.notify({ type: "negative", message: "User not logged in" });
+      return;
+    }
+
+    await axios.post(`${backendURL}/add_task.php`, {
+      ...task.value,
+      user_id: userId
+    });
+
     $q.notify({ type: "positive", message: "Task added!" });
     task.value = { title: "", description: "", problemFaced: "", timeSpent: "" };
-    fetchTasks();
+
+    fetchTasks(); // refresh task list
   } catch (err) {
     console.error(err);
     $q.notify({ type: "negative", message: "Failed to add task" });
   }
 };
+
 
 // Delete task
 const deleteTask = async (id) => {

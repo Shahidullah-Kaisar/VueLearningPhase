@@ -6,7 +6,7 @@
       <q-input v-model="email" label="Email" outlined class="q-mb-md" />
       <q-input v-model="password" type="password" label="Password" outlined class="q-mb-md" />
       <q-btn label="Register" color="primary" @click="register" class="full-width q-mb-sm" />
-      <q-btn flat label="Go to Login" @click="router.push('/login')" />
+      <q-btn flat label="Go to Login" @click="$router.push('/login')" />
     </q-card>
   </q-page>
 </template>
@@ -15,10 +15,6 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useQuasar } from "quasar";
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
 
 const $q = useQuasar();
 const username = ref("");
@@ -35,7 +31,8 @@ const register = async () => {
     });
     if (res.data.success) {
       $q.notify({ type: "positive", message: "Registered successfully!" });
-      router.push("/login");
+      // eslint-disable-next-line no-undef
+      $router.push("/login");
     } else {
       $q.notify({ type: "negative", message: res.data.message });
     }
