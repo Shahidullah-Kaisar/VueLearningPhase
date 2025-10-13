@@ -1,11 +1,10 @@
 <script setup>
+import UserAvatarMenu from 'src/components/UserAvatarMenu.vue'
 import { ref, onMounted, provide } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const leftDrawerOpen = ref(false)
 const router = useRouter()
-
-const route = useRoute();
 
 const token = ref(localStorage.getItem('token'))
 provide('token', token) //globally share
@@ -16,18 +15,6 @@ onMounted(() => {
   }
 })
 
-const loading = ref(false)
-
-const logout = () => {
-  loading.value = true
-
-  setTimeout(() => {
-    localStorage.removeItem('token')
-    token.value = null
-    loading.value = false
-    router.push('/login')
-  }, 1000)
-}
 </script>
 
 <template>
@@ -48,6 +35,9 @@ const logout = () => {
           class="q-mr-sm text-white"
         />
         <q-toolbar-title class="text-h5 text-weight-bold"> 📝 MyTask </q-toolbar-title>
+
+        <UserAvatarMenu/>
+        
       </q-toolbar>
     </q-header>
 
@@ -102,18 +92,12 @@ const logout = () => {
             <q-item-section avatar><q-icon name="task_alt" /></q-item-section>
             <q-item-section class="text-weight-medium text-h6"> Tasks </q-item-section>
           </q-item>
-
-          <!-- Logout Button -->
-          <q-item clickable v-ripple @click="logout" class="rounded-borders q-ma-xs hover:bg-red-1">
-            <q-item-section avatar><q-icon name="logout" /></q-item-section>
-            <q-item-section class="text-weight-medium text-h6 text-red">Logout</q-item-section>
-          </q-item>
         </template>
 
         <template v-else>
-          <q-item to="/login" clickable v-ripple exact class="bg-green-2 text-green-9">
+          <q-item to="/login" clickable v-ripple exact active-class="bg-green-2 text-green-9">
             <q-item-section avatar><q-icon name="login" /></q-item-section>
-            <q-item-section class="text-weight-medium text-h6">{{ route.path === '/register' ? 'Register' : 'Login' }}</q-item-section>
+            <q-item-section class="text-weight-medium text-h6">Login</q-item-section>
           </q-item>
         </template>
       </q-list>
@@ -122,11 +106,6 @@ const logout = () => {
     <!-- Page Container -->
     <q-page-container class="bg-gradient-to-br from-green-50 via-white to-green-50 q-pa-md">
       <router-view />
-
-      <!-- Full screen spinner -->
-      <div v-if="loading" class="full-screen-spinner">
-        <q-spinner color="secondary" size="50px" />
-      </div>
     </q-page-container>
 
     <!-- Footer -->
