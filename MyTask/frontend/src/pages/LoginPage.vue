@@ -33,7 +33,7 @@ const login = async () => {
         token.value = res.data.token // update reactive token
 
         $q.notify({ type: 'positive', message: 'Login successful!' })
-        router.push('/tasks')
+        router.push('/')
       } else {
         $q.notify({ type: 'negative', message: 'Login Unsuccessful' })
       }

@@ -8,7 +8,8 @@ const routes = [
       { path: 'about', component: () => import('pages/AboutPage.vue') },
       { path: 'tasks', component: ()=> import('pages/TasksPage.vue')},
       { path: 'login', component: ()=> import('pages/LoginPage.vue')},
-      { path: 'register', component: ()=> import('pages/RegisterPage.vue')}
+      { path: 'register', component: ()=> import('pages/RegisterPage.vue')},
+      { path: '/task/:id', component: ()=> import('pages/SingleTaskPage.vue')},
     ]
   },
   {
