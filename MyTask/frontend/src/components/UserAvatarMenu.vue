@@ -1,28 +1,25 @@
 <script setup>
 import { ref, inject, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '../api/Api.js' 
 
 const router = useRouter()
-const backendURL = 'http://localhost/MyTask/backend/api/user/get_user_info.php'
 
-// Reactive token injected from MainLayout
-const token = inject('token') // must be a ref from MainLayout
+// Reactive token from MainLayout
+const token = inject('token') // must be a ref
 const user = ref({ username: '', email: '' })
 
+
 // Fetch user info whenever token changes
-const fetchUserInfo = async (newToken) => {
-  if (!newToken) {
+const fetchUserInfo = async () => {
+  if (!token.value) {
     user.value = { username: '', email: '' }
     router.push('/login')
     return
   }
 
   try {
-    const res = await axios.get(backendURL, {
-      headers: { Authorization: `Bearer ${newToken}` },
-    })
-
+    const res = await api.getUserInfo();
     if (res.data.success) {
       user.value = res.data.user
     } else {
@@ -37,53 +34,44 @@ const fetchUserInfo = async (newToken) => {
 }
 
 // Watch token reactively
-watch(
-  token,
-  (newToken) => {
-    fetchUserInfo(newToken)
-  },
-  { immediate: true },
-)
+watch(token, fetchUserInfo, { immediate: true })
 
 // Logout function
 const logout = () => {
   localStorage.removeItem('token')
+  localStorage.removeItem('user_id') // optional
   token.value = null
+  router.push('/login')
 }
+
 </script>
 
+
 <template>
-  <div v-if="user.username">
-    <q-btn round dense flat color="transparent" @click="showMenu = !showMenu">
-      <!-- Avatar inside button -->
-      <q-avatar color="deep-orange-10" text-color="white">
-        {{ user.username.charAt(0).toUpperCase() }}
-      </q-avatar>
+  <div v-if="user.username" class="q-pa-md">
+    <q-btn color="deep-orange-8" :label="`Welcome ${user.username}`">
+      <q-menu>
+        <div class="row no-wrap q-pa-md">
+          <q-separator vertical inset class="q-mx-lg" />
 
-      <!-- Dropdown menu -->
-      <q-menu v-model="showMenu">
-        <q-list style="min-width: 200px">
-          <q-item>
-            <q-item-section avatar>
-              <q-avatar color="purple" text-color="white">
-                {{ user.username.charAt(0).toUpperCase() }}
-              </q-avatar>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label class="text-weight-medium">{{ user.username }}</q-item-label>
-              <q-item-label caption>{{ user.email }}</q-item-label>
-            </q-item-section>
-          </q-item>
+          <div class="column items-center">
+            <q-avatar size="72px">
+              <img src="https://cdn.quasar.dev/img/avatar4.jpg">
+            </q-avatar>
 
-          <q-separator />
+            <div class="text-subtitle1 q-mt-md q-mb-xs">{{ user.username }}</div>
+            <div class="text-subtitle1 q-mt-md q-mb-xs">{{ user.email }}</div>
 
-          <q-item clickable v-ripple @click="logout">
-            <q-item-section avatar>
-              <q-icon name="logout" color="red" />
-            </q-item-section>
-            <q-item-section class="text-red text-weight-medium">Logout</q-item-section>
-          </q-item>
-        </q-list>
+            <q-btn
+            @click="logout"
+              color="deep-orange-8"
+              label="Logout"
+              push
+              size="md"
+              v-close-popup
+            />
+          </div>
+        </div>
       </q-menu>
     </q-btn>
   </div>

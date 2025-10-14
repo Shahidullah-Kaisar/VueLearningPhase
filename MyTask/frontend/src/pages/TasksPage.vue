@@ -1,16 +1,14 @@
 <script setup>
-import axios from 'axios'
 import { useQuasar } from 'quasar'
-import { onMounted, ref } from 'vue'
+import api from '../api/Api.js' 
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
 const router = useRouter()
-const backendURL = 'http://localhost/MyTask/backend/api'
 
 const tasks = ref([])
 
-// --- Edit Modal ---
 const editDialog = ref(false)
 const editTaskData = ref({
   id: null,
@@ -20,22 +18,23 @@ const editTaskData = ref({
   timeSpent: '',
 })
 
-// Fetch tasks
+
 const fetchTasks = async () => {
   try {
     const token = localStorage.getItem('token')
-    const userId = localStorage.getItem('user_id') // login সময়ে set করা লাগবে
+    const userId = localStorage.getItem('user_id') 
 
     if (!token || !userId) {
       router.push('/login')
       return
     }
 
-    const res = await axios.get(`${backendURL}/get_tasks.php?user_id=${userId}`)
+    const res = await api.getTasks(userId);
+
 
     if (res.data.success) {
       tasks.value = res.data.tasks
-      console.log(tasks)
+
     } else {
       $q.notify({ type: 'negative', message: 'Failed to fetch tasks' })
     }
@@ -45,10 +44,10 @@ const fetchTasks = async () => {
   }
 }
 
-// Delete task
+
 const deleteTask = async (id) => {
   try {
-    await axios.get(`${backendURL}/delete_task.php?id=${id}`)
+    await api.deleteTask(id);
     $q.notify({ type: 'positive', message: 'Task deleted!' })
     fetchTasks()
   } catch (err) {
@@ -69,10 +68,10 @@ const openEditModal = (item) => {
   editDialog.value = true
 }
 
-// Update task
+
 const updateTask = async () => {
   try {
-    await axios.patch(`${backendURL}/update_task.php`, {
+    await api.updateTask({
       id: editTaskData.value.id,
       title: editTaskData.value.title,
       description: editTaskData.value.description,
@@ -89,6 +88,24 @@ const updateTask = async () => {
   }
 }
 
+
+const current = ref(1)      // Current page
+const perPage = ref(2)      // Tasks per page
+const totalPages = ref(1)   // Total pages
+
+// Computed for paginated tasks
+const paginatedTasks = computed(() => {
+  const start = (current.value - 1) * perPage.value
+  const end = start + perPage.value
+  return tasks.value.slice(start, end)
+})
+
+// Watch tasks to update total pages
+watch(tasks, (newTasks) => {
+  totalPages.value = Math.ceil(newTasks.length / perPage.value)
+})
+
+
 onMounted(() => {
   fetchTasks()
 })
@@ -98,7 +115,7 @@ onMounted(() => {
   <!-- Task Cards -->
   <div v-if="tasks.length > 0" class="q-pa-sm">
     <q-card
-      v-for="item in tasks"
+      v-for="item in paginatedTasks"
       :key="item.id"
       class="q-mb-md shadow-6 rounded-borders task-card transition-all hover:shadow-12"
       bordered
@@ -225,4 +242,16 @@ onMounted(() => {
     <div class="text-h6 text-grey-6">No tasks yet</div>
     <div class="text-caption text-grey-5">Add your first task above to get started!</div>
   </div>
+
+  <div class="q-pa-lg flex flex-center bg-green-2">
+  <q-pagination
+    v-model="current"
+    :max="totalPages"
+    color="deep-orange"
+    boundary-links
+  />
+</div>
+
 </template>
+
+

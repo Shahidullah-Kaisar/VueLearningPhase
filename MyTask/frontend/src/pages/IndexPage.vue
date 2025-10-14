@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+
 
 const $q = useQuasar()
 const backendURL = 'http://localhost/MyTask/backend/api'
@@ -17,31 +18,6 @@ const task = ref({
   user_id: '',
 })
 
-const tasks = ref([])
-
-// Fetch tasks
-const fetchTasks = async () => {
-  try {
-    const token = localStorage.getItem('token')
-    const userId = localStorage.getItem('user_id') // login সময়ে set করা লাগবে
-
-    if (!token || !userId) {
-      router.push('/login')
-      return
-    }
-
-    const res = await axios.get(`${backendURL}/get_tasks.php?user_id=${userId}`)
-
-    if (res.data.success) {
-      tasks.value = res.data.tasks
-    } else {
-      $q.notify({ type: 'negative', message: 'Failed to fetch tasks' })
-    }
-  } catch (err) {
-    console.error(err)
-    $q.notify({ type: 'negative', message: 'Server error' })
-  }
-}
 
 // Add task
 const addTask = async () => {
@@ -62,18 +38,16 @@ const addTask = async () => {
     $q.notify({ type: 'positive', message: 'Task added!' })
     task.value = { title: '', description: '', problemFaced: '', timeSpent: '' }
     router.push('/tasks');
+  
 
-    fetchTasks() // refresh task list
   } catch (err) {
     console.error(err)
     $q.notify({ type: 'negative', message: 'Failed to add task' })
   }
 }
 
-onMounted(() => {
-  fetchTasks()
-})
 </script>
+
 
 <template>
   <q-page class="q-pa-md bg-gradient-to-br from-blue-1 to-purple-1 min-vh-100">

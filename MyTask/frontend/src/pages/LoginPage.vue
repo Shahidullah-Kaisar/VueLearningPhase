@@ -1,14 +1,13 @@
 <script setup>
 import { inject, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '../api/Api.js'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
 const router = useRouter()
 const email = ref('')
 const password = ref('')
-const backendURL = 'http://localhost/MyTask/backend/api'
 
 const token = inject('token') // reactive token from App.vue / MainLayout.vue
 const loading = ref(false)
@@ -17,20 +16,15 @@ const login = async () => {
   loading.value = true
 
   try {
-    const res = await axios.post(`${backendURL}/auth/login.php`, {
-      email: email.value,
-      password: password.value,
-    })
+    const res = await api.loginUser(email, password);
 
-    // spinner effect for 1 second
     setTimeout(() => {
       loading.value = false
 
       if (res.data.success) {
-        // save token and user id in localStorage
         localStorage.setItem('token', res.data.token)
-        localStorage.setItem('user_id', res.data.user.id) // important for fetching tasks
-        token.value = res.data.token // update reactive token
+        localStorage.setItem('user_id', res.data.user.id)
+        token.value = res.data.token
 
         $q.notify({ type: 'positive', message: 'Login successful!' })
         router.push('/')
@@ -45,7 +39,6 @@ const login = async () => {
   }
 }
 </script>
-
 
 <template>
   <q-page class="q-pa-md flex flex-center column">
@@ -64,17 +57,3 @@ const login = async () => {
   </q-page>
 </template>
 
-<!-- <style scoped>
-.full-screen-spinner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.7); /* semi-transparent overlay */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-</style> -->

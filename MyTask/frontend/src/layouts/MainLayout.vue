@@ -1,10 +1,11 @@
 <script setup>
 import UserAvatarMenu from 'src/components/UserAvatarMenu.vue'
 import { ref, onMounted, provide } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const leftDrawerOpen = ref(false)
-const router = useRouter()
+const router = useRouter();
+const route = useRoute();
 
 const token = ref(localStorage.getItem('token'))
 provide('token', token) //globally share
@@ -95,9 +96,9 @@ onMounted(() => {
         </template>
 
         <template v-else>
-          <q-item to="/login" clickable v-ripple exact active-class="bg-green-2 text-green-9">
+          <q-item to="/login" clickable v-ripple exact class="bg-green-2 text-green-9">
             <q-item-section avatar><q-icon name="login" /></q-item-section>
-            <q-item-section class="text-weight-medium text-h6">Login</q-item-section>
+            <q-item-section class="text-weight-medium text-h6">{{ route.path === '/register' ? "Register" : "Login" }}</q-item-section>
           </q-item>
         </template>
       </q-list>
